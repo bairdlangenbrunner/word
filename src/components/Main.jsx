@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { people as peopleFromJSON } from "../people";
 import Header from "./Header";
-import { TURBOPACK_CLIENT_MIDDLEWARE_MANIFEST } from "next/dist/shared/lib/constants";
+import clsx from "clsx";
 
 export default function Main() {
   function shuffle(array) {
@@ -20,6 +20,7 @@ export default function Main() {
   const [people, setPeople] = useState(() =>
     shuffle(peopleFromJSON).slice(0, nAttempts)
   );
+  const [guessedLetters, setGuessedLetters] = useState([]);
 
   // map over the people you just chose
   const peopleElements = people.map((person) => (
@@ -34,11 +35,39 @@ export default function Main() {
     </span>
   ));
 
-  const keyboardElements = alphabet.split("").map((letter) => (
-    <button className="keyboard-tile" key={letter}>
-      {letter.toUpperCase()}
-    </button>
-  ));
+  const keyboardElements = alphabet.split("").map((letter) => {
+    // const classNameFull = guessedLetters.includes(letter)
+    //   ? currentWord.split("").includes(letter)
+    //     ? "keyboard-tile letter-correct"
+    //     : "keyboard-tile letter-incorrect"
+    //   : "keyboard-tile";
+    const isGuessed = guessedLetters.includes(letter);
+    const isCorrect = currentWord.includes(letter);
+    const classNameFull = clsx("keyboard-tile", {
+      "letter-correct": isGuessed && isCorrect,
+      "letter-incorrect": isGuessed && !isCorrect,
+    });
+    // console.log(classNameFull)
+    return (
+      <button
+        className={classNameFull}
+        key={letter}
+        onClick={() => handleLetterClick(letter)}
+      >
+        {letter.toUpperCase()}
+      </button>
+    );
+  });
+
+  function handleLetterClick(letter) {
+    setGuessedLetters((prevGuessedLetters) =>
+      prevGuessedLetters.includes(letter)
+        ? prevGuessedLetters
+        : [...prevGuessedLetters, letter]
+    );
+    // console.log("guessed letter " + letter);
+    // console.log(guessedLetters);
+  }
 
   return (
     <div className="main-div">
@@ -58,7 +87,7 @@ export default function Main() {
       <div className="keyboard-div">{keyboardElements}</div>
 
       <div className="new-game-div">
-        <button className='new-game-button'>new game</button>
+        <button className="new-game-button">new game</button>
       </div>
     </div>
   );

@@ -21,51 +21,52 @@ html {
 
 body {
   background-color: var(--black);
-  color: var(--white);
+  color: var(--stone-200);
+  min-width: 375px;
   /* height: 100vh; */
   /* width: 100vw; */
 }
 
 .main-div {
-  border: 10px var(--red-700) solid;
-  margin: auto;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-evenly;
+  border: 5px var(--orange-500) solid;
+  /* margin: auto; */
+  /* display: flex; */
+  /* flex-direction: column; */
+  /* justify-content: space-around; */
   height: 100vh;
-  padding-bottom: 100px
+  /* padding-bottom: 100px; */
+  /* gap: 20px */
 }
 
 /* HEADER STUFF */
 .header-div {
   margin: auto;
   text-align: center;
-  opacity: 0.666;
+  opacity: 1;
+  margin-block: 30px;
 }
 .header-div > h1 {
-  font-size: 4.5rem;
-  color: transparent;
+  font-size: 2rem;
+  font-weight: 900;
 }
 .header-div > p {
-  font-size: 0.9rem;
+  font-size: 0.8rem;
   color: var(--stone-300);
 }
 
 /* STATUS STUFF */
 .status-div {
   background-color: var(--green);
-  /* width: 100%; */
+  /* width: 50%; */
   height: 75px;
-  border-radius: 10px;
+  /* border-radius: 10px; */
   margin: auto;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 10px;
   padding: 10px;
-  visibility: hidden;
-  /* margin-block: 25px; */
+  margin-block: 15px;
 }
 
 .status-div > p {
@@ -83,16 +84,14 @@ body {
   gap: 5px;
   justify-content: center;
   margin: auto;
-  /* width: 90%; */
-  /* display: grid; */
-  /* grid-template-columns: repeat(auto-fit, minmax(3rem, 1fr)); */
+  margin-block: 15px;
 }
 .person-tile {
-  font-size: 2.75rem;
+  font-size: 2.25rem;
   border: 2px var(--red-800) solid;
   background-color: var(--red-200);
-  width: 3.5rem;
-  height: 3.5rem;
+  width: 3rem;
+  height: 3rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -103,15 +102,17 @@ body {
 .letters-div {
   display: flex;
   margin: auto;
+  margin-block: 15px;
   gap: 3px;
-  /* margin-block: 25px; */
   font-weight: 300;
+  display: flex;
+  justify-content: center;
 }
 .letter-tile {
-  font-size: 2.25rem;
+  font-size: 1.75rem;
   background-color: var(--stone-800);
-  width: 3.5rem;
-  height: 3.25rem;
+  width: 2.5rem;
+  height: 2.25rem;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -121,6 +122,7 @@ body {
 /* KEYBOARD */
 .keyboard-div {
   margin: auto;
+  margin-top: 25px;
   display: flex;
   flex-wrap: wrap;
   gap: 7px;
@@ -139,12 +141,22 @@ body {
   color: var(--stone-900);
 }
 .keyboard-div > button {
-  cursor: pointer;
   box-shadow: none;
   border: none;
 }
 .keyboard-div > button:active {
-  background-color: var(--amber-600);
+  background-color: var(--stone-800);
+  border: 1px var(--stone-200) solid;
+  color: var(--stone-200);
+}
+
+.letter-correct {
+  background-color: var(--green-800);
+  color: var(--stone-200);
+}
+.letter-incorrect {
+  background-color: var(--red-800);
+  color: var(--stone-200);
 }
 
 /* NEW GAME BUTTON */
@@ -152,6 +164,7 @@ body {
   display: flex;
   margin: auto;
   margin-top: 50px;
+  justify-content: center;
 }
 .new-game-button {
   background-color: var(--sky-600);
@@ -161,4 +174,14 @@ body {
   padding: 10px 75px;
   font-size: 1.25rem;
   border-radius: 5px;
+  border: var(--sky-400) 1px solid;
+}
+
+/* ALL BUTTONS */
+button:hover {
+  border: 1px var(--stone-200) solid;
+  color: var(--stone-200);
+}
+button {
+  cursor: pointer;
 }
