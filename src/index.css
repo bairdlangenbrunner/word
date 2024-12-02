@@ -1,13 +1,13 @@
-@import 'tailwindcss-colors.css';
+@import "tailwindcss-colors.css";
 
 :root {
   --black: var(--stone-900);
   --white: var(--stone-200);
-  --red: red;
-  --green: green;
-  --blue: blue;
-  --yellow: yellow;
-  --orange: orange;
+  /* --red: red; */
+  --green: var(--green-800);
+  /* --blue: blue; */
+  /* --yellow: yellow; */
+  /* --orange: orange; */
 }
 
 *,
@@ -23,18 +23,142 @@ body {
   background-color: var(--black);
   color: var(--white);
   /* height: 100vh; */
+  /* width: 100vw; */
 }
 
 .main-div {
-  width: 600px;
-  border: 1px var(--white) solid;
-  border-radius: 20px;
-  padding: 20px;
+  border: 10px var(--red-700) solid;
   margin: auto;
   display: flex;
   flex-direction: column;
+  justify-content: space-evenly;
+  height: 100vh;
+  padding-bottom: 100px
 }
 
+/* HEADER STUFF */
 .header-div {
   margin: auto;
+  text-align: center;
+  opacity: 0.666;
+}
+.header-div > h1 {
+  font-size: 4.5rem;
+  color: transparent;
+}
+.header-div > p {
+  font-size: 0.9rem;
+  color: var(--stone-300);
+}
+
+/* STATUS STUFF */
+.status-div {
+  background-color: var(--green);
+  /* width: 100%; */
+  height: 75px;
+  border-radius: 10px;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 10px;
+  visibility: hidden;
+  /* margin-block: 25px; */
+}
+
+.status-div > p {
+  font-size: 0.9rem;
+}
+
+.visibility-hidden {
+  visibility: hidden;
+}
+
+/* PEOPLE */
+.people-div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  justify-content: center;
+  margin: auto;
+  /* width: 90%; */
+  /* display: grid; */
+  /* grid-template-columns: repeat(auto-fit, minmax(3rem, 1fr)); */
+}
+.person-tile {
+  font-size: 2.75rem;
+  border: 2px var(--red-800) solid;
+  background-color: var(--red-200);
+  width: 3.5rem;
+  height: 3.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 100px;
+}
+
+/* LETTERS */
+.letters-div {
+  display: flex;
+  margin: auto;
+  gap: 3px;
+  /* margin-block: 25px; */
+  font-weight: 300;
+}
+.letter-tile {
+  font-size: 2.25rem;
+  background-color: var(--stone-800);
+  width: 3.5rem;
+  height: 3.25rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-bottom: 2px solid var(--stone-300);
+}
+
+/* KEYBOARD */
+.keyboard-div {
+  margin: auto;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  width: 350px;
+  justify-content: center;
+}
+.keyboard-tile {
+  font-size: 1.125rem;
+  border-radius: 3px;
+  width: 40px;
+  height: 40px;
+  /* display: flex; */
+  /* justify-content: center; */
+  /* align-items: center; */
+  background-color: var(--amber-500);
+  color: var(--stone-900);
+}
+.keyboard-div > button {
+  cursor: pointer;
+  box-shadow: none;
+  border: none;
+}
+.keyboard-div > button:active {
+  background-color: var(--amber-600);
+}
+
+/* NEW GAME BUTTON */
+.new-game-div {
+  display: flex;
+  margin: auto;
+  margin-top: 50px;
+}
+.new-game-button {
+  background-color: var(--sky-600);
+  color: var(--stone-900);
+  border: none;
+  width: auto;
+  padding: 10px 75px;
+  font-size: 1.25rem;
+  border-radius: 5px;
 }

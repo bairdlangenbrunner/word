@@ -1,0 +1,16 @@
+export const people = [
+  { symbol: "🧑‍🚀", name: "astronaut" },
+  { symbol: "🧑‍🎨", name: "artist" },
+  { symbol: "🧑‍🍳", name: "chef" },
+  { symbol: "👮", name: "cop" },
+  { symbol: "🕵️", name: "detective" },
+  { symbol: "🧑‍⚕️", name: "doctor" },
+  { symbol: "🧝", name: "elf" },
+  { symbol: "🧑‍🌾", name: "farmer" },
+  { symbol: "🧑‍🚒", name: "firefighter" },
+  { symbol: "🧑‍⚖️", name: "judge" },
+  { symbol: "🥷", name: "ninja" },
+  { symbol: "🧑‍🎤", name: "singer" },
+  { symbol: "🧑‍🏫", name: "teacher" },
+  { symbol: "🧙", name: "witch" },
+];
