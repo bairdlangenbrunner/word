@@ -7,7 +7,7 @@ export default function Header(props) {
         <span style={{ color: "var(--green-500)" }}>r</span>
         <span style={{ color: "var(--sky-500)" }}>d</span>
       </h1>
-      <p>guess the word in {props.nAttempts} attempts or fewer</p>
+      <p>guess the word in {props.nAttempts} attempts or fewer; a wrong guess kills one of your emoji</p>
     </>
   );
 }

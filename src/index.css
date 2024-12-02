@@ -29,13 +29,7 @@ body {
 
 .main-div {
   border: 5px var(--orange-500) solid;
-  /* margin: auto; */
-  /* display: flex; */
-  /* flex-direction: column; */
-  /* justify-content: space-around; */
   height: 100vh;
-  /* padding-bottom: 100px; */
-  /* gap: 20px */
 }
 
 /* HEADER STUFF */
@@ -44,10 +38,12 @@ body {
   text-align: center;
   opacity: 1;
   margin-block: 30px;
+  width: 225px;
 }
 .header-div > h1 {
-  font-size: 2rem;
+  font-size: 2.5rem;
   font-weight: 900;
+  opacity: 50%;
 }
 .header-div > p {
   font-size: 0.8rem;
@@ -56,7 +52,6 @@ body {
 
 /* STATUS STUFF */
 .status-div {
-  background-color: var(--green);
   /* width: 50%; */
   height: 75px;
   /* border-radius: 10px; */
@@ -67,14 +62,28 @@ body {
   justify-content: center;
   padding: 10px;
   margin-block: 15px;
+  /* visibility: hidden; */
 }
 
-.status-div > p {
+.status-lost {
+  background-color: var(--red-800);
+  visibility: visible;
+}
+
+.status-won {
+  background-color: var(--green-800);
+  visibility: visible;
+}
+
+p {
   font-size: 0.9rem;
 }
 
-.visibility-hidden {
-  visibility: hidden;
+p.dead-people-text {
+  color: var(--red-500);
+  font-size: 0.9rem;
+  font-weight: bold;
+  text-align: center;
 }
 
 /* PEOPLE */
@@ -87,7 +96,7 @@ body {
   margin-block: 15px;
 }
 .person-tile {
-  font-size: 2.25rem;
+  font-size: 2.5rem;
   border: 2px var(--red-800) solid;
   background-color: var(--red-200);
   width: 3rem;
@@ -96,6 +105,12 @@ body {
   align-items: center;
   justify-content: center;
   border-radius: 100px;
+}
+
+.person-dead {
+  background-color: var(--stone-800);
+  border: 2px var(--stone-200) solid;
+  font-size: 2rem;
 }
 
 /* LETTERS */
@@ -131,7 +146,7 @@ body {
 }
 .keyboard-tile {
   font-size: 1.125rem;
-  border-radius: 3px;
+  border-radius: 5px;
   width: 40px;
   height: 40px;
   /* display: flex; */
@@ -142,7 +157,7 @@ body {
 }
 .keyboard-div > button {
   box-shadow: none;
-  border: none;
+  border: 1px var(--stone-800) solid;
 }
 .keyboard-div > button:active {
   background-color: var(--stone-800);
@@ -159,6 +174,11 @@ body {
   color: var(--stone-200);
 }
 
+.game-over {
+  background-color: var(--stone-900);
+  color: var(--stone-600)
+}
+
 /* NEW GAME BUTTON */
 .new-game-div {
   display: flex;
@@ -172,7 +192,7 @@ body {
   border: none;
   width: auto;
   padding: 10px 75px;
-  font-size: 1.25rem;
+  font-size: 1rem;
   border-radius: 5px;
   border: var(--sky-400) 1px solid;
 }

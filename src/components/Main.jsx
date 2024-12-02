@@ -1,9 +1,11 @@
 import { useState } from "react";
 import { people as peopleFromJSON } from "../people";
-import Header from "./Header";
 import clsx from "clsx";
+import { generate } from "random-words";
+import Header from "./Header";
 
 export default function Main() {
+  // Shuffle array utility
   function shuffle(array) {
     for (let i = array.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
@@ -13,81 +15,123 @@ export default function Main() {
   }
 
   const alphabet = "abcdefghijklmnopqrstuvwxyz";
-  const [currentWord, setCurrentWord] = useState("react");
-  const nAttempts = currentWord.length;
-  const [gameWon, setGameWon] = useState(false);
-  const [gameLost, setGameLost] = useState(false);
+  const [wordLength, setWordLength] = useState(5);
+  const [currentWord, setCurrentWord] = useState(
+    generate({ minLength: wordLength, maxLength: wordLength })
+  );
   const [people, setPeople] = useState(() =>
-    shuffle(peopleFromJSON).slice(0, nAttempts)
+    shuffle(peopleFromJSON).slice(0, wordLength)
   );
   const [guessedLetters, setGuessedLetters] = useState([]);
 
-  // map over the people you just chose
-  const peopleElements = people.map((person) => (
-    <span className="person-tile" key={person.name}>
-      {person.symbol}
+  // Derived state
+  const wrongGuessCount = guessedLetters.filter(
+    (letter) => !currentWord.includes(letter)
+  ).length;
+  const isGameLost = wrongGuessCount === currentWord.length;
+  const isGameWon = currentWord
+    .split("")
+    .every((letter) => guessedLetters.includes(letter));
+  const isGameOver = isGameLost || isGameWon;
+  const deadPeople = people.slice(0, wrongGuessCount);
+
+  // Generate people elements
+  const peopleElements = people.map((person, index) => (
+    <span
+      className={clsx("person-tile", index < wrongGuessCount && "person-dead")}
+      key={person.name}
+    >
+      {index < wrongGuessCount ? "💀" : person.symbol}
     </span>
   ));
 
+  // generate letter tiles
   const letterElements = currentWord.split("").map((letter) => (
     <span className="letter-tile" key={crypto.randomUUID()}>
-      {letter.toUpperCase()}
+      {guessedLetters.includes(letter) ? letter.toUpperCase() : ""}
     </span>
   ));
 
-  const keyboardElements = alphabet.split("").map((letter) => {
-    // const classNameFull = guessedLetters.includes(letter)
-    //   ? currentWord.split("").includes(letter)
-    //     ? "keyboard-tile letter-correct"
-    //     : "keyboard-tile letter-incorrect"
-    //   : "keyboard-tile";
-    const isGuessed = guessedLetters.includes(letter);
-    const isCorrect = currentWord.includes(letter);
-    const classNameFull = clsx("keyboard-tile", {
-      "letter-correct": isGuessed && isCorrect,
-      "letter-incorrect": isGuessed && !isCorrect,
-    });
-    // console.log(classNameFull)
-    return (
-      <button
-        className={classNameFull}
-        key={letter}
-        onClick={() => handleLetterClick(letter)}
-      >
-        {letter.toUpperCase()}
-      </button>
-    );
-  });
+  // generate keyboard
+  const keyboardElements = alphabet.split("").map((letter) => (
+    <button
+      className={clsx("keyboard-tile", {
+        "letter-correct":
+          guessedLetters.includes(letter) && currentWord.includes(letter),
+        "letter-incorrect":
+          guessedLetters.includes(letter) && !currentWord.includes(letter),
+        "game-over": isGameOver,
+      })}
+      key={letter}
+      onClick={() => handleLetterClick(letter)}
+      disabled={isGameOver}
+    >
+      {letter.toUpperCase()}
+    </button>
+  ));
 
   function handleLetterClick(letter) {
-    setGuessedLetters((prevGuessedLetters) =>
-      prevGuessedLetters.includes(letter)
-        ? prevGuessedLetters
-        : [...prevGuessedLetters, letter]
+    setGuessedLetters((prevGuessed) =>
+      prevGuessed.includes(letter) ? prevGuessed : [...prevGuessed, letter]
     );
-    // console.log("guessed letter " + letter);
-    // console.log(guessedLetters);
   }
+
+  function resetGame() {
+    setCurrentWord(generate({ minLength: wordLength, maxLength: wordLength }));
+    setPeople(shuffle(peopleFromJSON).slice(0, wordLength));
+    setGuessedLetters([]);
+  }
+
+  const gameStatusClass = clsx(
+    "status-div",
+    isGameLost && "status-lost",
+    isGameWon && "status-won"
+  );
+
+  const youKilledText =
+    deadPeople.length > 0 ? (
+      deadPeople.length === currentWord.length - 1 ? (
+        <>
+          you just killed the {deadPeople.at(-1).name}! : (
+          <br />
+          you only have the {people.at(-1).name} left
+        </>
+      ) : (
+        `you just killed the ${deadPeople.at(-1).name}! : (`
+      )
+    ) : (
+      ""
+    );
 
   return (
     <div className="main-div">
       <div className="header-div">
-        <Header nAttempts={nAttempts} />
+        <Header nAttempts={currentWord.length} />
       </div>
 
-      <div className="status-div">
-        <h2>you win!</h2>
-        <p>well done</p>
+      <div className={gameStatusClass}>
+        {isGameWon && (
+          <>
+            <h2>you win!</h2>
+            <p>well done</p>
+          </>
+        )}
+        {isGameLost && (
+          <>
+            <h2>you lost!</h2>
+            <p>all your people are dead :(</p>
+          </>
+        )}
+        {!isGameOver && <p className="dead-people-text">{youKilledText}</p>}
       </div>
 
       <div className="people-div">{peopleElements}</div>
-
       <div className="letters-div">{letterElements}</div>
-
       <div className="keyboard-div">{keyboardElements}</div>
-
       <div className="new-game-div">
-        <button className="new-game-button">new game</button>
+        <button className="new-game-button" onClick={resetGame}>
+          new game
+        </button>
       </div>
     </div>
   );
