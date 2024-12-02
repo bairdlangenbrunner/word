@@ -1,0 +1,46 @@
+produce the tailwindcss-colors.css file via:
+
+npm install tailwindcss
+npx tailwindcss init
+
+****************************************
+tailwind.config.js file should be:
+****************************************
+const colors = require('tailwindcss/colors');
+
+module.exports = {
+  content: ["./src/**/*.{html,js}"], // Adjust paths as needed
+  theme: {
+    extend: {},
+  },
+  plugins: [
+    function ({ addBase }) {
+      const colorVariables = Object.entries(colors).reduce((vars, [name, value]) => {
+        if (typeof value === 'object') {
+          // Generate nested variables for shades (e.g., --blue-500)
+          Object.entries(value).forEach(([shade, hex]) => {
+            vars[`--${name}-${shade}`] = hex;
+          });
+        } else {
+          // Flat variables for single colors
+          vars[`--${name}`] = value;
+        }
+        return vars;
+      }, {});
+
+      addBase({
+        ":root": colorVariables,
+      });
+    },
+  ],
+};
+****************************************
+****************************************
+then run:
+npx tailwindcss -o output.css
+
+then copy/paste just the color :root defs into this file
+
+then:
+npm uninstall tailwindcss
+rm tailwind.config.js
