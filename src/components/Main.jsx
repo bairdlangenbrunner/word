@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { people as peopleFromJSON } from "../people";
 import clsx from "clsx";
 import { generate } from "random-words";
@@ -14,28 +14,29 @@ export default function Main() {
     return array;
   }
 
+  const nPeople = 5;
   const alphabet = "abcdefghijklmnopqrstuvwxyz";
   const [wordLength, setWordLength] = useState(5);
   const [currentWord, setCurrentWord] = useState(
     generate({ minLength: wordLength, maxLength: wordLength })
   );
   const [people, setPeople] = useState(() =>
-    shuffle(peopleFromJSON).slice(0, wordLength)
+    shuffle(peopleFromJSON).slice(0, nPeople)
   );
   const [guessedLetters, setGuessedLetters] = useState([]);
 
-  // Derived state
+  // derived state
   const wrongGuessCount = guessedLetters.filter(
     (letter) => !currentWord.includes(letter)
   ).length;
-  const isGameLost = wrongGuessCount === currentWord.length;
+  const isGameLost = wrongGuessCount === nPeople;
   const isGameWon = currentWord
     .split("")
     .every((letter) => guessedLetters.includes(letter));
   const isGameOver = isGameLost || isGameWon;
   const deadPeople = people.slice(0, wrongGuessCount);
 
-  // Generate people elements
+  // generate people elements
   const peopleElements = people.map((person, index) => (
     <span
       className={clsx("person-tile", index < wrongGuessCount && "person-dead")}
@@ -51,6 +52,12 @@ export default function Main() {
       {guessedLetters.includes(letter) ? letter.toUpperCase() : ""}
     </span>
   ));
+
+  // if you select a diff word length, reset game
+  // clicking new game also still works for this
+  useEffect(() => {
+    resetGame(wordLength);
+  }, [wordLength]);
 
   // generate keyboard
   const keyboardElements = alphabet.split("").map((letter) => (
@@ -76,21 +83,21 @@ export default function Main() {
     );
   }
 
-  function resetGame() {
-    setCurrentWord(generate({ minLength: wordLength, maxLength: wordLength }));
-    setPeople(shuffle(peopleFromJSON).slice(0, wordLength));
-    setGuessedLetters([]);
-  }
-
   const gameStatusClass = clsx(
     "status-div",
     isGameLost && "status-lost",
     isGameWon && "status-won"
   );
 
+  function handleWordLengthChange(event) {
+    const newWordLength = parseInt(event.target.value, 10); // convert to number
+    setWordLength(newWordLength); // update word length
+    resetGame(newWordLength); // reset game with new word length
+  }
+
   const youKilledText =
     deadPeople.length > 0 ? (
-      deadPeople.length === currentWord.length - 1 ? (
+      deadPeople.length === nPeople - 1 ? (
         <>
           you just killed the {deadPeople.at(-1).name}! : (
           <br />
@@ -103,10 +110,16 @@ export default function Main() {
       ""
     );
 
+  function resetGame(newWordLength = wordLength) {
+    setCurrentWord(generate({ minLength: wordLength, maxLength: wordLength }));
+    setPeople(shuffle(peopleFromJSON).slice(0, nPeople));
+    setGuessedLetters([]);
+  }
+
   return (
     <div className="main-div">
       <div className="header-div">
-        <Header nAttempts={currentWord.length} />
+        <Header nAttempts={nPeople} />
       </div>
 
       <div className={gameStatusClass}>
@@ -128,10 +141,31 @@ export default function Main() {
       <div className="people-div">{peopleElements}</div>
       <div className="letters-div">{letterElements}</div>
       <div className="keyboard-div">{keyboardElements}</div>
-      <div className="new-game-div">
-        <button className="new-game-button" onClick={resetGame}>
-          new game
-        </button>
+      <div className="game-controls-div">
+        <div className="word-length-div">
+          <label htmlFor="wordLength">set word length</label>
+          <select
+            id="wordLength"
+            name="wordLength"
+            onChange={handleWordLengthChange}
+          >
+            <option value="5" selected>
+              5
+            </option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
+            <option value="10">10</option>
+            <option value="11">11</option>
+            <option value="12">12</option>
+          </select>
+        </div>
+        <div className="new-game-div">
+          <button className="new-game-button" onClick={resetGame}>
+            new game
+          </button>
+        </div>
       </div>
     </div>
   );
