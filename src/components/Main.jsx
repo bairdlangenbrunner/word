@@ -1,27 +1,17 @@
 import { useState, useEffect } from "react";
 import { people as peopleFromJSON } from "../people";
+import { shuffle, generateWord } from "../utils/utils";
 import clsx from "clsx";
-import { generate } from "random-words";
 import Header from "./Header";
 
-export default function Main() {
-  // Shuffle array utility
-  function shuffle(array) {
-    for (let i = array.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [array[i], array[j]] = [array[j], array[i]];
-    }
-    return array;
-  }
+const N_PEOPLE = 5;
+const ALPHABET = "abcdefghijklmnopqrstuvwxyz";
 
-  const nPeople = 5;
-  const alphabet = "abcdefghijklmnopqrstuvwxyz";
+export default function Main() {
   const [wordLength, setWordLength] = useState(5);
-  const [currentWord, setCurrentWord] = useState(
-    generate({ minLength: wordLength, maxLength: wordLength })
-  );
+  const [currentWord, setCurrentWord] = useState(generateWord(wordLength));
   const [people, setPeople] = useState(() =>
-    shuffle(peopleFromJSON).slice(0, nPeople)
+    shuffle(peopleFromJSON).slice(0, N_PEOPLE)
   );
   const [guessedLetters, setGuessedLetters] = useState([]);
 
@@ -29,7 +19,7 @@ export default function Main() {
   const wrongGuessCount = guessedLetters.filter(
     (letter) => !currentWord.includes(letter)
   ).length;
-  const isGameLost = wrongGuessCount === nPeople;
+  const isGameLost = wrongGuessCount === N_PEOPLE;
   const isGameWon = currentWord
     .split("")
     .every((letter) => guessedLetters.includes(letter));
@@ -60,7 +50,7 @@ export default function Main() {
   }, [wordLength]);
 
   // generate keyboard
-  const keyboardElements = alphabet.split("").map((letter) => (
+  const keyboardElements = ALPHABET.split("").map((letter) => (
     <button
       className={clsx("keyboard-tile", {
         "letter-correct":
@@ -97,7 +87,7 @@ export default function Main() {
 
   const youKilledText =
     deadPeople.length > 0 ? (
-      deadPeople.length === nPeople - 1 ? (
+      deadPeople.length === N_PEOPLE - 1 ? (
         <>
           you just killed the {deadPeople.at(-1).name}! : (
           <br />
@@ -111,36 +101,52 @@ export default function Main() {
     );
 
   function resetGame(newWordLength = wordLength) {
-    setCurrentWord(generate({ minLength: wordLength, maxLength: wordLength }));
-    setPeople(shuffle(peopleFromJSON).slice(0, nPeople));
+    setCurrentWord(generateWord(wordLength));
+    setPeople(shuffle(peopleFromJSON).slice(0, N_PEOPLE));
     setGuessedLetters([]);
   }
+
+  function renderGameStatus() {
+    if (isGameWon) {
+      return (
+        <>
+          <h2>you win!</h2>
+          <p>well done</p>
+        </>
+      );
+    }
+    if (isGameLost) {
+      return (
+        <>
+          <h2>you lost!</h2>
+          <p>all your people are dead :(</p>
+        </>
+      );
+    }
+    return <p className="dead-people-text">{youKilledText}</p>;
+  }
+
+  const wordLengthOptions = Array.from({ length: 8 }, (_, i) => 5 + i); // [5, 6, ..., 12]
 
   return (
     <div className="main-div">
       <div className="header-div">
-        <Header nAttempts={nPeople} />
+        <Header nAttempts={N_PEOPLE} />
       </div>
 
-      <div className={gameStatusClass}>
-        {isGameWon && (
-          <>
-            <h2>you win!</h2>
-            <p>well done</p>
-          </>
-        )}
-        {isGameLost && (
-          <>
-            <h2>you lost!</h2>
-            <p>all your people are dead :(</p>
-          </>
-        )}
-        {!isGameOver && <p className="dead-people-text">{youKilledText}</p>}
-      </div>
+      {/* game status (win, lose, killed, blank) */}
+      <div className={gameStatusClass}>{renderGameStatus()}</div>
 
+      {/* people icons */}
       <div className="people-div">{peopleElements}</div>
+
+      {/* letters */}
       <div className="letters-div">{letterElements}</div>
+
+      {/* keyboard */}
       <div className="keyboard-div">{keyboardElements}</div>
+
+      {/* word length selector and new game button */}
       <div className="game-controls-div">
         <div className="word-length-div">
           <label htmlFor="wordLength">set word length</label>
@@ -148,17 +154,14 @@ export default function Main() {
             id="wordLength"
             name="wordLength"
             onChange={handleWordLengthChange}
+            value={wordLength}
+            defaultValue="5"
           >
-            <option value="5" selected>
-              5
-            </option>
-            <option value="6">6</option>
-            <option value="7">7</option>
-            <option value="8">8</option>
-            <option value="9">9</option>
-            <option value="10">10</option>
-            <option value="11">11</option>
-            <option value="12">12</option>
+            {wordLengthOptions.map((value) => (
+              <option key={value} value={value}>
+                {value}
+              </option>
+            ))}
           </select>
         </div>
         <div className="new-game-div">
