@@ -35,39 +35,35 @@ body {
 /* HEADER STUFF */
 .header-div {
   margin: auto;
-  opacity: 50%;
   text-align: center;
-  /* margin-block: 30px; */
   padding-block: 25px;
   display: flex;
   flex-direction: column;
   align-items: center;
   width: 100%;
-  border-bottom: 1px var(--stone-500) solid;
+  border-bottom: 1px var(--orange-500) solid;
 }
 .header-div > h1 {
   font-size: 2.5rem;
   font-weight: 900;
+  opacity: 50%;
 }
 .header-div > p {
   font-size: 0.8rem;
   color: var(--stone-300);
   width: 225px;
+  opacity: 50%;
 }
 
 /* STATUS STUFF */
 .status-div {
-  /* width: 50%; */
   height: 75px;
-  /* border-radius: 10px; */
   margin: auto;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 10px;
-  /* margin-block: 15px; */
-  /* visibility: hidden; */
+  /* padding: 10px; */
 }
 
 .status-lost {
@@ -98,8 +94,8 @@ p.dead-people-text {
   gap: 5px;
   justify-content: center;
   margin: auto;
-  margin-top: 10px;
-  /* margin-block: 15px; */
+  margin-top: 25px;
+  margin-bottom: 10px
 }
 .person-tile {
   font-size: 2.5rem;
@@ -123,7 +119,7 @@ p.dead-people-text {
 .letters-div {
   display: flex;
   margin: auto;
-  margin-block: 15px;
+  /* margin-block: 25px; */
   gap: 3px;
   font-weight: 300;
   display: flex;
@@ -143,7 +139,7 @@ p.dead-people-text {
 /* KEYBOARD */
 .keyboard-div {
   margin: auto;
-  margin-top: 25px;
+  margin-block: 25px;
   display: flex;
   flex-wrap: wrap;
   gap: 5px;
