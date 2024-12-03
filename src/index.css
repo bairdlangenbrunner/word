@@ -36,7 +36,7 @@ body {
 .header-div {
   margin: auto;
   text-align: center;
-  padding-block: 25px;
+  padding-block: 15px;
   display: flex;
   flex-direction: column;
   align-items: center;
