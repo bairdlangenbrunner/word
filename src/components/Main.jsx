@@ -119,7 +119,9 @@ export default function Main() {
       return (
         <>
           <h2>you lost!</h2>
-          <p>all your people are dead :(</p>
+          <p>
+            the word was <span style={{}}>{currentWord.toUpperCase()}</span> : (
+          </p>
         </>
       );
     }
