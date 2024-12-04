@@ -4,6 +4,7 @@ import { shuffle, generateWord } from "../utils/utils";
 import clsx from "clsx";
 import Header from "./Header";
 
+// constants for entire app
 const N_PEOPLE = 5;
 const ALPHABET = "abcdefghijklmnopqrstuvwxyz";
 
@@ -40,15 +41,15 @@ export default function Main() {
 
   // generate letter tiles
   const letterElements = currentWord.split("").map((letter) => {
-    const letterNotGuessed = isGameLost && !guessedLetters.includes(letter);
-    const letterElementClasses = clsx("letter-tile", {
-      "letter-not-guessed": letterNotGuessed,
-    });
+    // true/false for if letter isn't guessed (to color red ones when game over)
+    const shouldRevealLetter = guessedLetters.includes(letter) || isGameLost;
+    const letterElementClasses = clsx(
+      "letter-tile",
+      isGameLost && !guessedLetters.includes(letter) && "letter-not-guessed"
+    );
     return (
       <span className={letterElementClasses} key={crypto.randomUUID()}>
-        {guessedLetters.includes(letter) || isGameLost
-          ? letter.toUpperCase()
-          : ""}
+        {shouldRevealLetter ? letter.toUpperCase() : ""}
       </span>
     );
   });
