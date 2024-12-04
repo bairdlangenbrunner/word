@@ -9,11 +9,13 @@ const ALPHABET = "abcdefghijklmnopqrstuvwxyz";
 
 export default function Main() {
   const [wordLength, setWordLength] = useState(5);
-  const [currentWord, setCurrentWord] = useState(generateWord(wordLength));
+  const [currentWord, setCurrentWord] = useState("");
   const [people, setPeople] = useState(() =>
     shuffle(peopleFromJSON).slice(0, N_PEOPLE)
   );
   const [guessedLetters, setGuessedLetters] = useState([]);
+
+  console.log(currentWord);
 
   // derived state
   const wrongGuessCount = guessedLetters.filter(
@@ -37,11 +39,19 @@ export default function Main() {
   ));
 
   // generate letter tiles
-  const letterElements = currentWord.split("").map((letter) => (
-    <span className="letter-tile" key={crypto.randomUUID()}>
-      {guessedLetters.includes(letter) ? letter.toUpperCase() : ""}
-    </span>
-  ));
+  const letterElements = currentWord.split("").map((letter) => {
+    const letterNotGuessed = isGameLost && !guessedLetters.includes(letter);
+    const letterElementClasses = clsx("letter-tile", {
+      "letter-not-guessed": letterNotGuessed,
+    });
+    return (
+      <span className={letterElementClasses} key={crypto.randomUUID()}>
+        {guessedLetters.includes(letter) || isGameLost
+          ? letter.toUpperCase()
+          : ""}
+      </span>
+    );
+  });
 
   // if you select a diff word length, reset game
   // clicking new game also still works for this
@@ -119,9 +129,7 @@ export default function Main() {
       return (
         <>
           <h2>you lost!</h2>
-          <p>
-            the word was <span style={{}}>{currentWord.toUpperCase()}</span> : (
-          </p>
+          <p>better luck next time : (</p>
         </>
       );
     }

@@ -241,3 +241,7 @@ button {
   padding: 0 5px;
   border-radius: 5px;
 }
+
+.letter-not-guessed {
+  color: var(--red-600);
+}
